@@ -1,0 +1,78 @@
+package list;
+import java.util.*;
+public class ListPerfomanceTest {
+	public static void main(String[] args) {
+        final int N = 100_000; //Розмір списку
+        final int INSERTIONS = 1_000; //Кількість вставок
+
+        //Створення списків
+        List<Integer> arrayList = new ArrayList<>();
+        List<Integer> linkedList = new LinkedList<>();
+
+        System.out.println("Заповнення списків...");
+        measureTime("ArrayList: заповнення", () -> fillList(arrayList, N));
+        measureTime("LinkedList: заповнення", () -> fillList(linkedList, N));
+
+        System.out.println("\nДоступ до елементів...");
+        measureTime("ArrayList: Random Access", () -> randomAccess(arrayList, N));
+        measureTime("LinkedList: Random Access", () -> randomAccess(linkedList, N));
+        measureTime("ArrayList: Sequential Access", () -> sequentialAccess(arrayList));
+        measureTime("LinkedList: Sequential Access", () -> sequentialAccess(linkedList));
+
+        System.out.println("\nВставка елементів...");
+        measureTime("ArrayList: Вставка на початок", () -> insertAtBeginning(arrayList, INSERTIONS));
+        measureTime("LinkedList: Вставка на початок", () -> insertAtBeginning(linkedList, INSERTIONS));
+        measureTime("ArrayList: Вставка в кінець", () -> insertAtEnd(arrayList, INSERTIONS));
+        measureTime("LinkedList: Вставка в кінець", () -> insertAtEnd(linkedList, INSERTIONS));
+        measureTime("ArrayList: Вставка в середину", () -> insertInMiddle(arrayList, INSERTIONS));
+        measureTime("LinkedList: Вставка в середину", () -> insertInMiddle(linkedList, INSERTIONS));
+    }
+
+    private static void fillList(List<Integer> list, int size) {
+        Random random = new Random();
+        for (int i = 0; i < size; i++) {
+            list.add(random.nextInt());
+        }
+    }
+
+    private static void randomAccess(List<Integer> list, int size) {
+        for (int i = 0; i < size; i++) {
+            list.get(i);
+        }
+    }
+
+    private static void sequentialAccess(List<Integer> list) {
+        for (Integer i : list) {
+            //Просто обходимо список
+        }
+    }
+
+    private static void insertAtBeginning(List<Integer> list, int count) {
+        Random random = new Random();
+        for (int i = 0; i < count; i++) {
+            list.add(0, random.nextInt());
+        }
+    }
+
+    private static void insertAtEnd(List<Integer> list, int count) {
+        Random random = new Random();
+        for (int i = 0; i < count; i++) {
+            list.add(random.nextInt());
+        }
+    }
+
+    private static void insertInMiddle(List<Integer> list, int count) {
+        Random random = new Random();
+        int middle = list.size() / 2;
+        for (int i = 0; i < count; i++) {
+            list.add(middle, random.nextInt());
+        }
+    }
+
+    private static void measureTime(String taskName, Runnable task) {
+        long startTime = System.currentTimeMillis();
+        task.run();
+        long endTime = System.currentTimeMillis();
+        System.out.println(taskName + " виконано за " + (endTime - startTime) + " мс");
+    }
+}
